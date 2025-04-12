@@ -146,7 +146,7 @@
             } else if (aiChoice === "paper") {
               compChoice.textContent = "Ai Choice is Paper. You Lost";
               localStorage.setItem("localAiScore", parseInt(aScore) + 1);
-              computerScore.textContent = localStorage.getItem("localAiScore");
+              computerScore.textContent = parseInt(localStorage.getItem("localAiScore"));
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
@@ -155,8 +155,7 @@
             } else {
               compChoice.textContent = "Ai Choice is Scissors. You Won";
               localStorage.setItem("localPlayerScore", parseInt(pScore) + 1);
-              playerScore.textContent =
-                localStorage.getItem("localPlayerScore");
+              playerScore.textContent = parseInt(localStorage.getItem("localPlayerScore"));
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
@@ -177,26 +176,25 @@
           loading();
           setTimeout(() => {
             if (aiChoice === "paper") {
-              compChoice.textContent = "Ai Choice is Rock. Tie";
+              compChoice.textContent = "Ai Choice is Paper. Tie";
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
                 compChoice.textContent = "";
               }, 2000);
             } else if (aiChoice === "scissors") {
-              compChoice.textContent = "Ai Choice is Paper. You Lost";
+              compChoice.textContent = "Ai Choice is Scissors. You Lost";
               localStorage.setItem("localAiScore", parseInt(aScore) + 1);
-              computerScore.textContent = localStorage.getItem("localAiScore");
+              computerScore.textContent = parseInt(localStorage.getItem("localAiScore"));
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
                 compChoice.textContent = "";
               }, 2000);
             } else {
-              compChoice.textContent = "Ai Choice is Scissors. You Won";
+              compChoice.textContent = "Ai Choice is Rock. You Won";
               localStorage.setItem("localPlayerScore", parseInt(pScore) + 1);
-              playerScore.textContent =
-                localStorage.getItem("localPlayerScore");
+              playerScore.textContent = parseInt(localStorage.getItem("localPlayerScore"));
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
@@ -217,26 +215,25 @@
           loading();
           setTimeout(() => {
             if (aiChoice === "scissors") {
-              compChoice.textContent = "Ai Choice is Rock. Tie";
+              compChoice.textContent = "Ai Choice is Scissors. Tie";
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
                 compChoice.textContent = "";
               }, 2000);
             } else if (aiChoice === "rock") {
-              compChoice.textContent = "Ai Choice is Paper. You Lost";
+              compChoice.textContent = "Ai Choice is Rock. You Lost";
               localStorage.setItem("localAiScore", parseInt(aScore) + 1);
-              computerScore.textContent = localStorage.getItem("localAiScore");
+              computerScore.textContent = parseInt(localStorage.getItem("localAiScore"));
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
                 compChoice.textContent = "";
               }, 2000);
             } else {
-              compChoice.textContent = "Ai Choice is Scissors. You Won";
+              compChoice.textContent = "Ai Choice is Paper. You Won";
               localStorage.setItem("localPlayerScore", parseInt(pScore) + 1);
-              playerScore.textContent =
-                localStorage.getItem("localPlayerScore");
+              playerScore.textContent = parseInt(localStorage.getItem("localPlayerScore"));
               setTimeout(function () {
                 event.target.style.backgroundColor = "rgb(197, 197, 197)";
                 running = false;
