@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rock Paper Scissors</title>
+  </head>
+  <body>
+    <h1>Rock Paper Scissors</h1>
+    <div class="scoreContainer">
+      <h2>Your Score: <span id="playerScore">0</span></h2>
+      <hr />
+      <h2>AI Score: <span id="aiScore">0</span></h2>
+    </div>
+    <p id="aiChoice"></p>
+    <div class="loadingAnimation">
+      <p id="point1" class="dot">.</p>
+      <p id="point2" class="dot">.</p>
+      <p id="point3" class="dot">.</p>
+    </div>
+    <div class="choicesContainer">
+      <button id="rock">Rock</button>
+      <button id="paper">Paper</button>
+      <button id="scissors">Scissors</button>
+    </div>
+    <button id="resetScore">Reset Score</button>
+
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+        background-color: #222;
+        color: white;
+      }
+
+      .scoreContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+      hr {
+        background-color: black;
+        width: 1px;
+      }
+
+      #aiChoice {
+        position: relative;
+        top: 60px;
+        font-size: 20px;
+      }
+
+      .loadingAnimation {
+        display: flex;
+        flex-direction: row;
+        gap: 15px;
+      }
+
+      .choicesContainer {
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+      }
+      .choicesContainer button {
+        border: 3px solid black;
+        border-radius: 20px;
+        padding: 20px;
+        cursor: pointer;
+        background-color: rgb(197, 197, 197);
+        text-align: center;
+        height: 100px;
+        width: 100px;
+      }
+      #resetScore {
+        margin: 20px auto;
+        padding: clamp(5px, 0.5vw, 10px) clamp(10px, 1vw, 15px);
+        background-color: #3498db;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: clamp(10px, 1.5vw, 14px);
+        width: 100%;
+        max-width: 150px;
+        box-sizing: border-box;
+      }
+
+      .dot {
+        opacity: 0;
+        font-size: 55px;
+        transition: all 1s;
+      }
+
+      @keyframes loadingAnim {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-50px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+    </style>
+    <script>
+      const playerScore = document.getElementById("playerScore");
+      const aiScore = document.getElementById("aiScore");
+      const compChoice = document.getElementById("aiChoice");
+      const point1 = document.getElementById("point1");
+      const point2 = document.getElementById("point2");
+      const point3 = document.getElementById("point3");
+      const rock = document.getElementById("rock");
+      const paper = document.getElementById("paper");
+      const scissors = document.getElementById("scissors");
+      const reset = document.getElementById("resetScore");
+      const choices = ["rock", "paper", "scissors"];
+      let running = false;
+
+      function loading() {
+        point1.style.opacity = "1";
+
+        setTimeout(() => {
+          point2.style.opacity = "1";
+        }, 400);
+
+        setTimeout(() => {
+          point3.style.opacity = "1";
+        }, 800);
+
+        setTimeout(() => {
+          point1.style.opacity = "0";
+          point2.style.opacity = "0";
+          point3.style.opacity = "0";
+        }, 1200);
+      }
+
+      let pScore = parseInt(localStorage.getItem("localPlayerScore") || "0");
+      let aScore = parseInt(localStorage.getItem("localAiScore") || "0");
+      playerScore.textContent = pScore;
+      aiScore.textContent = aScore;
+
+      function aiDecision(playerChoice) {
+        // وضع النسب لكل خيار
+        if (playerChoice === "rock") {
+          // عندما يختار اللاعب "Rock"، نزيد احتمالية أن يختار الـ AI "Paper"
+          let rand = Math.random();
+          if (rand < 0.5) return "paper"; // 50% احتمال أن يختار "paper"
+          if (rand < 0.8) return "rock";  // 30% احتمال أن يختار "rock"
+          return "scissors";              // 20% احتمال أن يختار "scissors"
+        } else if (playerChoice === "paper") {
+          // عندما يختار اللاعب "Paper"، نزيد احتمالية أن يختار الـ AI "scissors"
+          let rand = Math.random();
+          if (rand < 0.5) return "scissors"; // 50% احتمال أن يختار "scissors"
+          if (rand < 0.8) return "paper";    // 30% احتمال أن يختار "paper"
+          return "rock";                     // 20% احتمال أن يختار "rock"
+        } else {
+          // عندما يختار اللاعب "Scissors"، نزيد احتمالية أن يختار الـ AI "rock"
+          let rand = Math.random();
+          if (rand < 0.5) return "rock";     // 50% احتمال أن يختار "rock"
+          if (rand < 0.8) return "scissors"; // 30% احتمال أن يختار "scissors"
+          return "paper";                    // 20% احتمال أن يختار "paper"
+        }
+      }
+
+      rock.addEventListener("click", function (event) {
+        if (!running) {
+          running = true;
+          event.target.style.backgroundColor = "green";
+          let aiChoice = aiDecision("rock");
+          loading();
+          setTimeout(() => {
+            if (aiChoice === "rock") {
+              compChoice.textContent = "AI chose Rock. Tie!";
+            } else if (aiChoice === "paper") {
+              compChoice.textContent = "AI chose Paper. You lost!";
+              aScore++;
+              localStorage.setItem("localAiScore", aScore);
+              aiScore.textContent = aScore;
+            } else {
+              compChoice.textContent = "AI chose Scissors. You won!";
+              pScore++;
+              localStorage.setItem("localPlayerScore", pScore);
+              playerScore.textContent = pScore;
+            }
+            setTimeout(() => {
+              event.target.style.backgroundColor = "rgb(197, 197, 197)";
+              running = false;
+              compChoice.textContent = "";
+            }, 2000);
+          }, 1500);
+        }
+      });
+
+      paper.addEventListener("click", function (event) {
+        if (!running) {
+          running = true;
+          event.target.style.backgroundColor = "green";
+          let aiChoice = aiDecision("paper");
+          loading();
+          setTimeout(() => {
+            if (aiChoice === "paper") {
+              compChoice.textContent = "AI chose Paper. Tie!";
+            } else if (aiChoice === "scissors") {
+              compChoice.textContent = "AI chose Scissors. You lost!";
+              aScore++;
+              localStorage.setItem("localAiScore", aScore);
+              aiScore.textContent = aScore;
+            } else {
+              compChoice.textContent = "AI chose Rock. You won!";
+              pScore++;
+              localStorage.setItem("localPlayerScore", pScore);
+              playerScore.textContent = pScore;
+            }
+            setTimeout(() => {
+              event.target.style.backgroundColor = "rgb(197, 197, 197)";
+              running = false;
+              compChoice.textContent = "";
+            }, 2000);
+          }, 1500);
+        }
+      });
+
+      scissors.addEventListener("click", function (event) {
+        if (!running) {
+          running = true;
+          event.target.style.backgroundColor = "green";
+          let aiChoice = aiDecision("scissors");
+          loading();
+          setTimeout(() => {
+            if (aiChoice === "scissors") {
+              compChoice.textContent = "AI chose Scissors. Tie!";
+            } else if (aiChoice === "rock") {
+              compChoice.textContent = "AI chose Rock. You lost!";
+              aScore++;
+              localStorage.setItem("localAiScore", aScore);
+              aiScore.textContent = aScore;
+            } else {
+              compChoice.textContent = "AI chose Paper. You won!";
+              pScore++;
+              localStorage.setItem("localPlayerScore", pScore);
+              playerScore.textContent = pScore;
+            }
+            setTimeout(() => {
+              event.target.style.backgroundColor = "rgb(197, 197, 197)";
+              running = false;
+              compChoice.textContent = "";
+            }, 2000);
+          }, 1500);
+        }
+      });
+
+      reset.addEventListener("click", function () {
+        localStorage.clear();
+        pScore = 0;
+        aScore = 0;
+        playerScore.textContent = pScore;
+        aiScore.textContent = aScore;
+        compChoice.textContent = "";
+      });
+    </script>
+  </body>
+</html>
